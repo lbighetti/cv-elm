@@ -12,6 +12,8 @@ import Color
 import Data exposing (..)
 import List.Extra
 import Html.Attributes
+import Atom exposing (..)
+import Extra.Element exposing (..)
 
 
 --import Styles
@@ -103,50 +105,6 @@ mainColumns { left, right } =
         ]
 
 
-borderRight n =
-    Border.widthEach { right = 2, left = 0, top = 0, bottom = 0 }
-
-
-paddingRight n =
-    paddingEach { right = n, left = 0, top = 0, bottom = 0 }
-
-
-paddingLeft n =
-    paddingEach { right = 0, left = n, top = 0, bottom = 0 }
-
-
-a4Page attrs =
-    let
-        pageAttrs =
-            [ attribute <|
-                Html.Attributes.style
-                    [ ( "width", "210mm" )
-                    , ( "height", "296mm" )
-                    ]
-            , attribute <| Html.Attributes.attribute "data-class" "page"
-            ]
-    in
-        el (pageAttrs ++ attrs)
-
-
-
--- BASE ELEMENTS
-
-
-sectionTitle : List Attr -> String -> El
-sectionTitle props title =
-    el
-        (List.append props
-            [ paddingEach { bottom = 16, top = 0, left = 0, right = 0 }
-            , uppercase
-            , Font.size h2Size
-            , Font.letterSpacing 2
-            , Font.weight 600
-            ]
-        )
-        (text title)
-
-
 
 -- HEADER
 
@@ -178,10 +136,6 @@ headerView model =
         ]
 
 
-uppercase =
-    attribute <| Html.Attributes.style [ ( "text-transform", "uppercase" ) ]
-
-
 
 -- SECTIONS
 
@@ -190,9 +144,7 @@ introductionView model =
     column
         []
         [ sectionTitle [ alignRight, Font.color colors.black ] "Introduction"
-        , column
-            []
-            (List.map introSectionView model.data.introduction)
+        , column [] <| (List.map introSectionView model.data.introduction)
         ]
 
 
@@ -202,7 +154,7 @@ introSectionView data =
         [ paddingEach { bottom = 10, top = 0, right = 0, left = 0 }
         , Font.size 12
         , Font.lineHeight 1.4
-        , attribute <| Html.Attributes.style [ ( "hyphens", "auto" ) ]
+        , hyphenatedText
         , fonts.roboto
         , Font.justify
         , Font.weight 300
@@ -452,22 +404,6 @@ projectTitle string =
         (text <| String.join " // " [ string ])
 
 
-bodyText string =
-    paragraph
-        [ Font.size 12
-        , Font.lineHeight 1.4
-        , fonts.roboto
-        , Font.weight 300
-        , Font.letterSpacing 0.5
-        , paddingBottom 6
-        ]
-        [ text <| string ]
-
-
-paddingBottom pxs =
-    paddingEach { bottom = pxs, top = 0, left = 0, right = 0 }
-
-
 listSingleton a =
     [ a ]
 
@@ -522,10 +458,6 @@ main =
 
 h1Size =
     30
-
-
-h2Size =
-    20
 
 
 h3Size =
